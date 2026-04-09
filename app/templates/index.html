@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LabPilot AI</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+        }
+
+        .header {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin-top: 5px;
+            color: #555;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 25px;
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(12px);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #6366f1, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(99,102,241,0.3);
+        }
+
+        .result {
+            border-left: 6px solid #ccc;
+        }
+
+        .low { border-left-color: #22c55e; }
+        .medium { border-left-color: #f59e0b; }
+        .high { border-left-color: #ef4444; }
+
+        .title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .badge.low { background: #dcfce7; color: #166534; }
+        .badge.medium { background: #fef3c7; color: #92400e; }
+        .badge.high { background: #fee2e2; color: #991b1b; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .block {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .block h4 {
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .block p {
+            margin: 0;
+            font-size: 14px;
+            color: #222;
+        }
+
+        .disclaimer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: gray;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>LabPilot AI</h1>
+    <p>Advanced Antimicrobial Resistance Intelligence Platform</p>
+</div>
+
+<div class="container">
+
+    <!-- INPUT PANEL -->
+    <div class="card">
+        <form method="POST">
+
+            <label>Year</label>
+            <input type="number" name="year" min="2000" max="2025" required>
+
+            <label>Country</label>
+            <select name="country">
+                <option value="Canada">Canada</option>
+                <option value="UK">UK</option>
+                <option value="USA">USA</option>
+            </select>
+
+            <label>Antibiotic</label>
+            <select name="antibiotic">
+                {% for ab in antibiotics %}
+                    <option value="{{ ab }}">{{ ab }}</option>
+                {% endfor %}
+            </select>
+            <label>Infection Type</label>
+            <select name="infection">
+              <option value="UTI">UTI</option>
+              <option value="Respiratory">Respiratory</option>
+              <option value="Blood">Bloodstream</option>
+              <option value="Skin">Skin</option>
+            </select>
+
+<label>Sample Type</label>
+<select name="sample">
+    <option value="Urine">Urine</option>
+    <option value="Blood">Blood</option>
+    <option value="Sputum">Sputum</option>
+    <option value="Wound">Wound</option>
+</select>
+
+<label>Patient Age Group</label>
+<select name="age_group">
+    <option value="Child">Child</option>
+    <option value="Adult">Adult</option>
+    <option value="Elderly">Elderly</option>
+</select>
+
+            <button type="submit">Run AI Analysis</button>
+
+        </form>
+    </div>
+
+    <!-- RESULT PANEL -->
+    {% if result %}
+    <div class="card result {{ result.risk_level | lower }}">
+
+        <div class="title">{{ result.prediction }}</div>
+
+        <div class="badge {{ result.risk_level | lower }}">
+            {{ result.risk_level }} RISK
+        </div>
+
+        <div class="grid">
+
+            <div class="block">
+                <h4>Probability</h4>
+                <p>{{ result.probability }}</p>
+            </div>
+
+            <div class="block">
+                <h4>Reason</h4>
+                <p>{{ result.reason }}</p>
+            </div>
+
+            <div class="block">
+                <h4>Antibiotic Family</h4>
+                <p>{{ result.extra_info.family }}</p>
+            </div>
+
+            <div class="block">
+                <h4>Usage</h4>
+                <p>{{ result.extra_info.usage }}</p>
+            </div>
+
+            <div class="block">
+                <h4>Clinical Action</h4>
+                <p>{{ result.next_step }}</p>
+            </div>
+
+            <div class="block">
+                <h4>Experimental Plan</h4>
+                <p>{{ result.experiment_plan }}</p>
+            </div>
+            <div class="section">
+                <h4>Top Recommended Antibiotics</h4>
+
+
+            {% for r in recommendations %}
+                <p>
+                   <b>{{ r.antibiotic }}</b> — {{ r.risk }} ({{ r.probability }})
+                </p>
+            {% endfor %}
+            </div>
+
+        </div>
+
+        <div class="disclaimer">
+            ⚠️ {{ result.disclaimer }}
+        </div>
+
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
