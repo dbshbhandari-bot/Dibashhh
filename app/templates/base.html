@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LabPilot AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>LabPilot AI</h2>
+
+        <a href="{{ url_for('home') }}">AMR Intelligence</a>
+        <a href="{{ url_for('experiment_planner') }}">Experiment Planner</a>
+        <a href="{{ url_for('simulation_lab') }}">Simulation Lab</a>
+        <a href="{{ url_for('ai_assistant') }}">AI Assistant</a>
+        <a href="{{ url_for('drug_discovery') }}">Drug Discovery</a>
+    </aside>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+</div>
+
+</body>
+</html>

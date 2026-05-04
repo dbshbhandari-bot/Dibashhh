@@ -12,7 +12,15 @@ file_path = os.path.join(BASE_DIR, "Data", "processed", "cleaned_data.csv")
 data = pd.read_csv(file_path)
 
 # Keep relevant columns
-data = data[["Year", "Country", "Ciprofloxacin", "cip_sr","Antibiotic"]]
+data = data[["Year", "Country", "Ciprofloxacin", "cip_sr","Antibiotic",
+    "Severity",
+    "Setting",
+    "Previous_Use",
+    "Duration",
+    "Infection",
+    "Sample",
+    "Age_Group"
+]]
 data = data.dropna()
 
 # Clean Ciprofloxacin
@@ -29,7 +37,18 @@ data["cip_sr"] = data["cip_sr"].astype(int)
 data["Country"] = data["Country"].astype("category").cat.codes
 
 # Features and target
-X = data[["Year", "Country","Antibiotic"]]
+X = data[[
+    "Year",
+    "Country",
+    "Antibiotic",
+    "Severity",
+    "Setting",
+    "Previous_Use",
+    "Duration",
+    "Infection",
+    "Sample",
+    "Age_Group"
+]]
 y = data["cip_sr"]
 
 # Split

@@ -65,6 +65,17 @@ def adjust_resistance(row):
         return 0 if random.random() > 0.7 else 1
 
 data["cip_sr"] = data.apply(adjust_resistance, axis=1)
+import random
+
+# Add new features
+data["Severity"] = [random.randint(0, 2) for _ in range(len(data))]   # Mild=0, Moderate=1, Severe=2
+data["Setting"] = [random.randint(0, 1) for _ in range(len(data))]    # Community=0, Hospital=1
+data["Previous_Use"] = [random.randint(0, 1) for _ in range(len(data))]
+data["Duration"] = [random.randint(1, 14) for _ in range(len(data))]
+
+data["Infection"] = [random.randint(0, 3) for _ in range(len(data))]
+data["Sample"] = [random.randint(0, 3) for _ in range(len(data))]
+data["Age_Group"] = [random.randint(0, 2) for _ in range(len(data))]
 # Show result
 print(data.head())
 print(data.info())

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+    <h1>Experiment Planner</h1>
+    <p>AI-guided biology experiment design</p>
+</div>
+
+<div class="dashboard-grid">
+
+    <!-- INPUT PANEL -->
+    <div class="panel">
+        <h3>Experiment Setup</h3>
+
+        <form method="POST">
+
+            <label>Experiment Type</label>
+            <select name="exp_type">
+                <option value="AST">Antibiotic Susceptibility Test</option>
+                <option value="PCR">PCR</option>
+                <option value="Culture">Bacterial Culture</option>
+            </select>
+
+            <label>Sample Type</label>
+            <select name="sample">
+                <option>Urine</option>
+                <option>Blood</option>
+                <option>Sputum</option>
+                <option>Wound</option>
+            </select>
+
+            <label>Objective</label>
+            <select name="goal">
+                <option>Identify bacteria</option>
+                <option>Test resistance</option>
+                <option>Confirm infection</option>
+            </select>
+
+            <label>Student Level</label>
+            <select name="level">
+                <option>Beginner</option>
+                <option>Intermediate</option>
+                <option>Advanced</option>
+            </select>
+
+            <button type="submit">Generate Experiment</button>
+
+        </form>
+    </div>
+
+    <!-- OUTPUT PANEL -->
+    <div class="panel results-panel">
+
+        {% if plan %}
+
+        <div class="result-header">
+            <h2>Generated Experiment Plan</h2>
+        </div>
+
+        <div class="result-card">
+            <h4>Steps</h4>
+            <p>{{ plan.steps }}</p>
+        </div>
+
+        <div class="result-card">
+            <h4>Required Materials</h4>
+            <p>{{ plan.materials }}</p>
+        </div>
+
+        <div class="result-card">
+            <h4>Expected Outcome</h4>
+            <p>{{ plan.outcome }}</p>
+        </div>
+        <div class="result-card">
+            <h4>Complexity Level</h4>
+            <p>{{ plan.complexity }}</p>
+        </div>
+
+        <div class="result-card">
+            <h4>Safety Note</h4>
+            <p>{{ plan.safety_note }}</p>
+        </div>
+
+
+        <div class="result-card">
+            <h4>Common Mistakes</h4>
+            <p>{{ plan.mistakes }}</p>
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+            <h2>No Experiment Yet</h2>
+            <p>Fill the inputs to generate a lab experiment plan.</p>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
