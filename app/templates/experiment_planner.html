@@ -55,11 +55,20 @@
 
         <div class="result-header">
             <h2>Generated Experiment Plan</h2>
+            <div class="result-card">
+            <h4>AMR Risk Received</h4>
+            <p>{{ plan.risk }}</p>
+           </div>
         </div>
 
         <div class="result-card">
             <h4>Steps</h4>
-            <p>{{ plan.steps }}</p>
+
+            <ol>
+           {% for step in plan.steps %}
+           <li>{{ step }}</li>
+           {% endfor %}
+           </ol>
         </div>
 
         <div class="result-card">

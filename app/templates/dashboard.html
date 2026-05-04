@@ -158,7 +158,13 @@
 
             <div class="result-card">
                 <h4>Experimental Plan</h4>
-                <p>{{ result.experiment_plan }}</p>
+         <p>{{ result.experiment_plan }}</p>
+                <form action="{{ url_for('experiment_planner') }}" method="POST">
+                 <input type="hidden" name="exp_type" value="AST">
+                 <input type="hidden" name="level" value="Intermediate">
+                 <input type="hidden" name="risk" value="{{ result.risk_level }}">
+                 <button type="submit">Generate Experiment Plan From AMR Result</button>
+                </form>
             </div>
 
         </div>
