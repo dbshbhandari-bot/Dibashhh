@@ -146,6 +146,7 @@ def home():
 def experiment_planner():
     plan = None
     risk = request.form.get("risk", "MEDIUM")
+    sample = request.form.get("sample")
 
     if request.method == "POST":
         exp_type = request.form.get("exp_type")
@@ -195,13 +196,115 @@ def experiment_planner():
             "safety_note": safety_note,
             "risk": risk,
         }
+        reasons = []
+
+        if risk == "HIGH":
+            reasons.append("High AMR risk detected, so advanced testing is recommended.")
+
+        if risk == "MEDIUM":
+            reasons.append("Medium AMR risk detected, so susceptibility testing is recommended.")
+
+        if risk == "LOW":
+            reasons.append("Low AMR risk detected, so standard validation is enough.")
+
+        if sample == "Urine":
+            reasons.append("Urine samples require careful contamination control.")
+
+        if sample == "Blood":
+            reasons.append("Blood samples require strict sterile handling.")
+
+        if level == "Beginner":
+            reasons.append("Beginner level selected, so the plan uses simpler steps.")
+
+        elif level == "Intermediate":
+            reasons.append("Intermediate level selected, so the plan includes more controlled lab workflow.")
+
+        else:
+            reasons.append("Advanced level selected, so the plan assumes stronger lab skills.")
+
+        plan["reason"] = reasons
 
     return render_template("experiment_planner.html", plan=plan)
 
-
-@app.route("/simulation-lab")
+@app.route("/simulation-lab",  methods=["GET", "POST"])
 def simulation_lab():
-    return render_template("simulation_lab.html")
+
+    sim = None
+
+    if request.method == "POST":
+
+        bacteria = request.form.get("bacteria")
+        antibiotic = request.form.get("antibiotic")
+
+        temp = int(request.form.get("temp"))
+        time = int(request.form.get("time"))
+        # =========================
+        # BACTERIA-SPECIFIC LOGIC
+        # =========================
+
+        if bacteria == "E. coli":
+
+            if temp >= 37:
+                growth = "Rapid gram-negative bacterial growth detected"
+                contamination = "MEDIUM"
+
+            else:
+                growth = "Reduced E. coli growth due to lower temperature"
+                contamination = "LOW"
+
+
+        elif bacteria == "S. aureus":
+
+            if time > 24:
+                growth = "Extended S. aureus persistence observed"
+                contamination = "HIGH"
+
+            else:
+                growth = "Moderate Staphylococcus growth pattern"
+                contamination = "MEDIUM"
+
+
+        else:
+
+            growth = "Standard bacterial growth pattern observed"
+            contamination = "MEDIUM"
+
+
+
+        # Resistance simulation
+        if antibiotic == "Amoxicillin":
+            resistance = "Possible resistance detected"
+
+        elif antibiotic == "Ciprofloxacin":
+            resistance = "Moderate resistance pattern"
+
+        else:
+            resistance = "Lower resistance probability"
+
+        if contamination == "HIGH":
+            recommendation = "Repeat experiment with stricter sterile technique and controlled incubation."
+        elif resistance == "Possible resistance detected":
+            recommendation = "Run confirmatory susceptibility testing and compare with alternative antibiotics."
+        else:
+            recommendation = "Proceed with standard validation and record results."
+        interpretation = (
+                f"{bacteria} exposed to {antibiotic} "
+                f"under simulated incubation conditions at "
+                f"{temp}°C for {time} hours. "
+                f"The AI model predicts {growth.lower()}."
+            )
+
+
+
+        sim = {
+            "growth": growth,
+            "resistance": resistance,
+            "contamination": contamination,
+            "interpretation": interpretation,
+            "recommendation": recommendation
+        }
+
+    return render_template("simulation_lab.html", sim=sim)
 
 
 @app.route("/ai-assistant")

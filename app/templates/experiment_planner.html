@@ -56,6 +56,14 @@
         <div class="result-header">
             <h2>Generated Experiment Plan</h2>
             <div class="result-card">
+        <h4>Why this experiment plan?</h4>
+            <ul>
+        {% for reason in plan.reason %}
+            <li>{{ reason }}</li>
+        {% endfor %}
+           </ul>
+        </div>
+            <div class="result-card">
             <h4>AMR Risk Received</h4>
             <p>{{ plan.risk }}</p>
            </div>

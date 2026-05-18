@@ -2,8 +2,85 @@
 {% block content %}
 
 <div class="page-header">
-    <h1>Coming Soon</h1>
-    <p>This module will be built next.</p>
+    <h1>Simulation Lab</h1>
+    <p>Predict experimental outcomes before physical testing</p>
+</div>
+
+<div class="dashboard-grid">
+
+    <!-- INPUT -->
+    <div class="panel">
+
+        <h3>Simulation Setup</h3>
+
+        <form method="POST">
+
+            <label>Bacteria</label>
+            <select name="bacteria">
+                <option>E. coli</option>
+                <option>S. aureus</option>
+                <option>K. pneumoniae</option>
+            </select>
+
+            <label>Antibiotic</label>
+            <select name="antibiotic">
+                <option>Ciprofloxacin</option>
+                <option>Doxycycline</option>
+                <option>Amoxicillin</option>
+            </select>
+
+            <label>Temperature (°C)</label>
+            <input type="number" name="temp" value="37">
+
+            <label>Incubation Time (hours)</label>
+            <input type="number" name="time" value="24">
+
+            <button type="submit">Run Simulation</button>
+
+        </form>
+
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="panel results-panel">
+
+        {% if sim %}
+
+        <div class="result-card">
+            <h4>Predicted Growth</h4>
+            <p>{{ sim.growth }}</p>
+        </div>
+
+        <div class="result-card">
+            <h4>Resistance Pattern</h4>
+            <p>{{ sim.resistance }}</p>
+        </div>
+
+        <div class="result-card">
+            <h4>Contamination Risk</h4>
+            <p>{{ sim.contamination }}</p>
+        </div>
+
+        <div class="result-card">
+            <h4>AI Interpretation</h4>
+            <div class="result-card">
+            <h4>Recommended Next Step</h4>
+            <p>{{ sim.recommendation }}</p>
+            </div>
+            <p>{{ sim.interpretation }}</p>
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+            <h2>No Simulation Yet</h2>
+            <p>Configure conditions and run simulation.</p>
+        </div>
+
+        {% endif %}
+
+    </div>
+
 </div>
 
 {% endblock %}
